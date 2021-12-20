@@ -4,8 +4,8 @@ class SessionsController < ApplicationController
 
     if user.save
       token = encode_user_data({ user_id: user.id })
-
-      render json: { token: token }, status: :ok
+      cookies.signed[:jwt] = {value: token, httponly: true}
+      render json: { username: user.username }, status: :ok
     else
       render json: { message: "invalid credentials" }, status: :unauthorized
     end
@@ -16,11 +16,15 @@ class SessionsController < ApplicationController
 
     if user && user.authenticate(params[:password])
       token = encode_user_data({user_id: user.id})
-
-      render json: { token: token }, status: :ok
+      cookies.signed[:jwt] = {value: token, httponly: true}
+      render json: { username: user.username }, status: :ok
     else 
       render json: { message: "invalid credentials" }, status: :unauthorized
     end
+  end
+
+  def logout
+    cookies.delete(:jwt)
   end
 
   private

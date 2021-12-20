@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::API
-  SECRET = "abcdefg"
-  helper_method :current_user
-  
+  SECRET = ENV['AUTH_SECRET']
+  include ::ActionController::Cookies  
   def authenticate
-    decoded_data = decode_user_data(request.headers["token"])
+    jwt = cookies.signed[:jwt]
+    decoded_data = decode_user_data(jwt)
     user_id = decoded_data[0]["user_id"] unless !decoded_data
     @current_user = User.find(user_id) unless !user_id
 
@@ -25,12 +25,5 @@ class ApplicationController < ActionController::API
     rescue => exception
       puts exception 
     end
-  end
-
-  private 
-  def current_user
-    decoded_data = decode_user_data(request.headers["token"])
-    user_id = decoded_data[0]["user_id"] unless !decoded_data
-    @current_user ||= User.find(user_id) unless !user_id
   end
 end
