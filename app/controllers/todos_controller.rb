@@ -2,12 +2,17 @@ class TodosController < ApplicationController
   before_action :authenticate
   
   def index
-    todos = @current_user.todos.order("created_at DESC")
-    render json: todos
+    @todos = @current_user.todos.order("created_at DESC")
+    render 'todos/index.json.jbuilder'
   end
 
   def create
-    todo = @current_user.todos.create(todo_param)
+    tp = todo_param
+    if tp[:category]
+      cat = Category.find_by(title: tp[:category])
+      tp[:category] = cat
+    end
+    todo = @current_user.todos.create(tp)
     render json: todo
   end
 
@@ -25,6 +30,6 @@ class TodosController < ApplicationController
 
   private 
     def todo_param
-      params.require(:todo).permit(:title, :done, :category)
+      params.require(:todo).permit(:title, :done, :category, :due_date)
     end
 end
