@@ -2,14 +2,14 @@ class TodosController < ApplicationController
   before_action :authenticate
   
   def index
-    @todos = @current_user.todos.order("created_at DESC")
-    render 'todos/index.json.jbuilder'
+    todos = @current_user.todos.order("created_at DESC")
+    render json: todos
   end
 
   def create
     tp = todo_param
     if tp[:category]
-      cat = Category.find_by(title: tp[:category])
+      cat = Category.find(tp[:category])
       tp[:category] = cat
     end
     todo = @current_user.todos.create(tp)

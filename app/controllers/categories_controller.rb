@@ -2,7 +2,7 @@ class CategoriesController < ApplicationController
 before_action :authenticate
   
   def index
-    categories = @current_user.categories.order("created_at DESC")
+    categories = @current_user.categories.order("created_at ASC")
     render json: categories
   end
 
@@ -25,6 +25,6 @@ before_action :authenticate
 
   private 
     def category_param
-      params.require(:category).permit(:title)
+      params.require(:category).permit(:title, :color)
     end
 end
