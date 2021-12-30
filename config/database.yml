@@ -22,4 +22,10 @@ test:
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  host: localhost
+  adapter: postgresql
+  encoding: utf8
+  database: cvwo-api/production
+  pool: 5
+  username: <%= ENV['CVWO-API_DATABASE_USER'] %>
+  password: <%= ENV['CVWO-API_DATABASE_PASSWORD'] %>
