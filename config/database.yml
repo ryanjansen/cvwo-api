@@ -27,5 +27,5 @@ production:
   encoding: utf8
   database: cvwo-api/production
   pool: 5
-  username: <%= ENV['CVWO-API_DATABASE_USER'] %>
-  password: <%= ENV['CVWO-API_DATABASE_PASSWORD'] %>
+  username: <%= ENV['CVWOAPI_DATABASE_USER'] %>
+  password: <%= ENV['CVWOAPI_DATABASE_PASSWORD'] %>
