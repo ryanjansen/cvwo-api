@@ -1,22 +1,21 @@
-FROM ubuntu
+FROM ruby:3.1.0-slim-bullseye
 
-RUN apt-get update -qq \
-&& apt-get install -y --no-install-recommends \ 
-build-essential \
-nodejs \
-git \
-libpq-dev \
-postgresql-client \
-ruby
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    postgresql-client \
+    git \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ADD . /cvwo-api
 WORKDIR /cvwo-api
-
-ENV BUNDLER_VERSION=2.2.22
-RUN gem update --system 
-RUN gem install bundler -v 2.2.22
+COPY Gemfile /cvwo-api/Gemfile
+COPY Gemfile.lock /cvwo-api/Gemfile.lock
 RUN bundle install
+
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
 
 EXPOSE 3000
 
-CMD ["bash"]
+CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0"]
