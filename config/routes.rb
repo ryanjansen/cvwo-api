@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   get "/user", to: "users#show"
 
+  get "/test", to: "todos#test"
   resources :todos
   resources :categories
 end

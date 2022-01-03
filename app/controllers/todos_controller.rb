@@ -28,6 +28,10 @@ class TodosController < ApplicationController
     head :ok
   end
 
+  def test
+    render json: { message: "test success"}
+  end
+
   private 
     def todo_param
       params.require(:todo).permit(:title, :done, :category, :due_date)
