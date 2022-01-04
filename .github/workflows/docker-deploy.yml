@@ -28,6 +28,7 @@ jobs:
       - name: Setup test database
         env:
           RAILS_ENV: test
+          POSTGRES_USER: cvwo-api
           POSTGRES_HOST: localhost
         run: |
           bin/rails db:setup
