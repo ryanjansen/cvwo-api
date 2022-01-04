@@ -5,7 +5,37 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: cvwo-api
+          POSTGRES_DB: cvwo-api_test
+          POSTGRES_PASSWORD: ""
+        ports: ["5432:5432"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby and install gems
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+          POSTGRES_HOST: localhost
+        run: |
+          bin/rails db:setup
+
+      - name: Run tests
+        run: bin/rails test
+
+  build_and_push:
     runs-on: ubuntu-latest
 
     steps:
