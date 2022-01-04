@@ -37,6 +37,12 @@ jobs:
           bin/rails db:setup
 
       - name: Run tests
+        env:
+          RAILS_ENV: test
+          POSTGRES_USER: cvwo-api
+          POSTGRES_HOST: localhost
+          POSTGRES_PASSWORD: password
+          POSTGRES_PORT: 5432
         run: bin/rails test
 
       - name: Login to Docker Hub
