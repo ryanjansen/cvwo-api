@@ -12,10 +12,8 @@ COPY Gemfile /cvwo-api/Gemfile
 COPY Gemfile.lock /cvwo-api/Gemfile.lock
 RUN bundle install
 
-COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+COPY . /cvwo-api
 
 EXPOSE 3000
 
-CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0"]
+CMD ["bash"]
